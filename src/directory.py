@@ -4,15 +4,9 @@ from sqlite3 import Error
 
 class Directory:
     def __init__(self, db_file):
-        self.sql_create_projects_table = """ CREATE TABLE IF NOT EXISTS Records (
-                                        id integer PRIMARY KEY,
-                                        name text NOT NULL,
-                                        email text NOT NULL,
-                                        age text NOT NULL,
-                                        country text NOT NULL
-                                    ); """
+        self.sql_create_projects_table = """ CREATE DIRECTORY (id integer PRIMARY KEY, name text NOT NULL, email text NOT NULL, age text NOT NULL, country text NOT NULL); """
 
-        self.create_connection(db_file)
+        self.make_connection(db_file)
 
     def make_connection(self, db_file):
         self.conn = None
@@ -21,7 +15,7 @@ class Directory:
         except Error as e:
             print(e)
 
-        self.create_table(self.sql_create_projects_table)
+        self.make_table(self.sql_create_projects_table)
 
     def close_connection(self):
         if self.conn:
