@@ -2,20 +2,19 @@ import sqlite3
 from sqlite3 import Error
 
 
-class RecordsHandler:
+class Directory:
     def __init__(self, db_file):
         self.sql_create_projects_table = """ CREATE TABLE IF NOT EXISTS Records (
                                         id integer PRIMARY KEY,
                                         name text NOT NULL,
                                         email text NOT NULL,
                                         age text NOT NULL,
-                                        origin text NOT NULL
+                                        country text NOT NULL
                                     ); """
 
         self.create_connection(db_file)
 
-    def create_connection(self, db_file):
-        """ create a database connection to a SQLite database """
+    def make_connection(self, db_file):
         self.conn = None
         try:
             self.conn = sqlite3.connect(db_file)
@@ -28,75 +27,69 @@ class RecordsHandler:
         if self.conn:
             self.conn.close()
 
-    def create_table(self, create_table_sql):
-        """create a table from the create_table_sql statement
-        :param conn: Connection object
-        :param create_table_sql: a CREATE TABLE statement
-        :return:
-        """
+    def make_table(self, create_table_sql):
         try:
-            c = self.conn.cursor()
-            c.execute(create_table_sql)
+            a = self.conn.cursor()
+            a.execute(create_table_sql)
             self.conn.commit()
         except Error as e:
             print(e)
 
-    def add_record(self, name="", email="", age="", origin=""):
-        sqlquery = "INSERT INTO Records (name, email, age, origin) VALUES ('%s', '%s', '%s', '%s')"
-        val = (name, email, age, origin)
-        query = sqlquery % val
+    def add_person(self, name="", email="", age="", country=""):
+        sql_query = "INSERT INTO DIRECTORY (name, email, age, country) VALUES ('%s', '%s', '%s', '%s')"
+        values = (name, email, age, country)
+        query = sql_query % values
         try:
-            c = self.conn.cursor()
-            c.execute(query)
+            a = self.conn.cursor()
+            a.execute(query)
             self.conn.commit()
         except Error as e:
             print(e)
 
-    def delete_record(self, record_id=-1):
-        sqlquery = "DELETE FROM Records WHERE id='%s'"
-        val = record_id
-        query = sqlquery % val
+    def delete_person(self, record_id=-1):
+        sql_query = "DELETE FROM DIRECTORY WHERE id='%s'"
+        values = record_id
+        query = sql_query % values
         try:
-            c = self.conn.cursor()
-            c.execute(query)
+            a = self.conn.cursor()
+            a.execute(query)
             self.conn.commit()
         except Error as e:
             print(e)
 
-    def look(self, email="", age=""):
-        sqlquery = "SELECT * FROM Records WHERE email='%s' AND age='%s'"
-        val = (email, age)
-        query = sqlquery % val
+    def search(self, email="", age=""):
+        sql_query = "SEARCH DIRECTORY WHERE email='%s' AND age='%s'"
+        values = (email, age)
+        query = sql_query % values
 
-        results = []
+        result = []
         try:
-            c = self.conn.cursor()
-            c.execute(query)
-            results.extend(c.fetchall())
+            a = self.conn.cursor()
+            a.execute(query)
+            result.extend(a.fetchall())
         except Error as e:
             print(e)
 
         return results
 
-    def list_all(self):
-        query = "SELECT * FROM Records"
-        results = []
+    def list_directory(self):
+        query = "SELECT DIRECTORY"
+        result = []
         try:
-            c = self.conn.cursor()
-            c.execute(query)
-            results.extend(c.fetchall())
+            a = self.conn.cursor()
+            a.execute(query)
+            result.extend(a.fetchall())
         except Error as e:
             print(e)
 
-        # loop through the rows
         for row in results:
             print(row)
     
-    def delete_all(self):
-        sqlquery = "DELETE FROM Records"
+    def delete_directory(self):
+        sql_query = "DELETE DIRECTORY"
         try:
-            c = self.conn.cursor()
-            c.execute(sqlquery)
+            a = self.conn.cursor()
+            a.execute(sql_query)
             self.conn.commit()
         except Error as e:
             print(e)
