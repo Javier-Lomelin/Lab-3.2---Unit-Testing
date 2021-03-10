@@ -2,39 +2,17 @@ import unittest
 import filecmp
 
 
-class TestFilecmpCmp(unittest.TestCase):
-    def test_different_content_shallow(self):
-        # file0 = os.path.join(os.path.dirname(__file__), '../resources/file0.txt')
-        # file1 = os.path.join(os.path.dirname(__file__), '../resources/file1.txt')
-        file0 = "resources/file0.txt"
+class FileCMPTest(unittest.TestCase):
+    def test_content_is_different_shallow(self):
         file1 = "resources/file1.txt"
+        file2 = "resources/file2.txt"
 
-        # Compare the os.stat() signature i.e the metadata
-        # of both files
-        comp = filecmp.cmp(file0, file1)
+        comp = filecmp.cmp(file1, file2)
         self.assertFalse(comp)
 
-    def test_same_content_shallow(self):
-        file0 = "resources/file0.txt"
-        file1 = "resources/file0_copy.txt"
-
-        # Compare the os.stat() signature i.e the metadata
-        # of both files
-        comp = filecmp.cmp(file0, file1)
-        self.assertTrue(comp)
-
-    def test_different_content_no_shallow(self):
-        file0 = "resources/file0.txt"
+    def test_content_equal_shallow(self):
         file1 = "resources/file1.txt"
+        file2 = "resources/file1_copy.txt"
 
-        # Compare the contents of both files
-        comp = filecmp.cmp(file0, file1, False)
-        self.assertFalse(comp)
-
-    def test_same_content_no_shallow(self):
-        file0 = "resources/file0.txt"
-        file1 = "resources/file0_copy.txt"
-
-        # Compare the contents of both files
-        comp = filecmp.cmp(file0, file1, False)
+        comp = filecmp.cmp(file1, file2)
         self.assertTrue(comp)
